@@ -19,7 +19,7 @@
             var ax=ay=15; // posição da maçã
 
             var trail = [] // rastro da cobra 
-            taill = 5; // tamanho da cauda
+            tail = 5; // tamanho da cauda
 
             document.addEventListener("keydown",keyPush) // "escutador" da página que qdo tiver um evento ele vai chamar a função keyPush
             
@@ -70,6 +70,7 @@
                     if (trail[i].x == px && trail[i].y == py){
 
                         vx=vy=0; // game over, para a cobra
+                        tail = 5 // volta a cobra pro tamanho inicial
                     }
 
                 }
@@ -77,13 +78,13 @@
                 trail.push({x:px, y:py}) // continuando o jogo criando um novo array de rastro no primeiro elemento do array
 
                 // tirando a ultima posição depois do passo de adição anterior
-                while (trail.length > taill){
+                while (trail.length > tail){
                     trail.shift();
                 }
 
                 if (ax == px && ay == py){ // se a cabeça estiver na mesma posição da maçã
                    
-                    taill++; // aumenta a cauda
+                    tail++; // aumenta a cauda
 
                     // troca as posições da maçã para uma posição aleatoria
                     ax = Math.floor(Math.random()*qp);
