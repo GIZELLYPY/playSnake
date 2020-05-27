@@ -1,0 +1,137 @@
+<!DOCTYPE HTML>
+<html lang="pt-br">
+<head>
+    <title>Snake Game HTML5/JavaScript</title>
+</head>
+<body>
+    <canvas id="stage" width="400" height="400"></canvas>
+    <script type="text/javascript">
+
+        window.onload = function(){
+            var stage = document.getElementById("stage");
+            var ctx = stage.getContext("2d") // dentro do context cria todos os desenhos, toda a parte grafica 
+
+            var vel = 1;
+            var vx = vy = 0; // iniciar no stage 
+            var px = py = 10; // posição da cabreça da cobra
+            var tp = 20; // tamanho da peça
+            var qp = 20; // quantidade de peças
+            var ax=ay=15; // posição da maçã
+
+            var trail = [] // rastro da cobra 
+            taill = 5; // tamanho da cauda
+
+            document.addEventListener("keydown",keyPush) // "escutador" da página que qdo tiver um evento ele vai chamar a função keyPush
+            
+
+
+            setInterval(game,60); // seta invervalo em milisegundos para chamar uma fiunçaõ novamente 
+
+            function game(){
+
+                px += vx; // atualiza a posição da cabeça da cobra, posição que está mais o valor da velocidade
+                py+=vy; 
+
+                if (px < 0){ // se a cabeça da cobra estiver na beirada, ela precisa ser enviada para o outro lado, para dar "a volta"
+                    px = qp -1;
+                }
+
+                if (px > qp -1){
+                    px = 0; 
+                }
+
+                if (py < 0){
+                    py = qp -1;
+                }
+
+                if (py > qp -1){
+                    py = 0
+                }
+
+
+
+
+                // pintando a tela toda a vez que a cobra andar
+                ctx.fillStyle = "black"; // cor de preenchimento do context
+                // comando para pintar 
+                ctx.fillRect(0,0,stage.width, stage.height); // começa no ponto 0,0 
+                
+
+                // pintando a maçã 
+                ctx.fillStyle = "red";
+                ctx.fillRect(ax * tp, ay*tp, tp, tp)
+
+                ctx.fillStyle = "gray"; // rastro da cobra 
+
+                for (var i = 0; i < trail.length; i++){
+                    ctx.fillRect(trail[i].x*tp, trail[i].y*tp,tp,tp) // pintando o lelemto da posição do rastro de cinza
+                    
+                    // verificando se a cabeça está batendo no rabo 
+                    if (trail[i].x == px && trail[i].y == py){
+
+                        vx=vy=0; // game over, para a cobra
+                    }
+
+                }
+
+                trail.push({x:px, y:py}) // continuando o jogo criando um novo array de rastro no primeiro elemento do array
+
+                // tirando a ultima posição depois do passo de adição anterior
+                while (trail.length > taill){
+                    trail.shift();
+                }
+
+                if (ax == px && ay == py){ // se a cabeça estiver na mesma posição da maçã
+                   
+                    taill++; // aumenta a cauda
+
+                    // troca as posições da maçã para uma posição aleatoria
+                    ax = Math.floor(Math.random()*qp);
+                    ay = Math.floor(Math.random()*qp);
+
+                }
+
+            }
+
+
+            // definindo a movimentação de jogo, o controle da cobra
+            // essa função vai ser executada qdo pressionar uma tecla
+            // isso sera possível por causa de document.addEventListener("",keyPush)
+            function keyPush(event){
+                switch (event.keyCode) {
+                    case 37: //  left do teclado
+                        vx = -vel;
+                        vy=0;
+                        break;
+                    
+                    case 38: // up do teclado, para subir a velocidade é negativa em y
+                        vx = 0;
+                        vy = -vel;
+                        break;
+
+                    case 39: // right
+                        vx = vel;
+                        vy = 0;
+                        break;
+
+                    case 40: // down, para descer a velocidade é positiva em y
+                        vx = 0;
+                        vy = vel;
+                        break;
+
+                
+                    default:
+                        break;
+                }
+
+            }
+
+        }
+    
+    
+    
+    </script>
+
+
+</body>
+</html>
